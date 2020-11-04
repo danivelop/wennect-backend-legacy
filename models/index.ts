@@ -11,6 +11,8 @@ import EnvironmentType from 'constants/EnvironmentType'
 const env: EnvironmentType = (process.env.NODE_ENV || EnvironmentType.Development) as EnvironmentType
 const { database, username, password } = config[env]
 
+const db = {} as any
+
 export function init(): Sequelize {
   const sequelize = new Sequelize(database, username, password, config[env])
 
@@ -18,8 +20,14 @@ export function init(): Sequelize {
   const Room = roomInit(sequelize)
   const Meeting = meetingInit(sequelize)
 
+  db.User = User
+  db.Room = Room
+  db.Meeting = Meeting
+
   Room.belongsToMany(User, { sourceKey: 'id', foreignKey: 'roomId', through: Meeting })
   User.belongsToMany(Room, { sourceKey: 'id', foreignKey: 'userId', through: Meeting })
 
   return sequelize
 }
+
+export default db
