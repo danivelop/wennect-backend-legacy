@@ -10,7 +10,7 @@ import { Sequelize } from 'sequelize/types'
 
 /* Internal dependencies */
 import { init } from 'models'
-import authRouter from 'routes/auth';
+import authRouter from 'routes/auth'
 import logger from 'logger'
 
 dotenv.config()

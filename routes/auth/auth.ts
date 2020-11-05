@@ -22,7 +22,7 @@ export const signup = async (req: Request, res: Response, next: NextFunction) =>
   }
 }
 
-export const login = async (req: Request, res: Response, next: NextFunction) => {
+export const signin = async (req: Request, res: Response, next: NextFunction) => {
   const { username, password } = req.body
 
   try {
@@ -50,6 +50,10 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
   }
 }
 
+export const signout = (req: any, res: Response) => {
+  return res.cookie('token', '').sendStatus(240)
+}
+
 export const isLoggedIn = (req: any, res: Response) => {
-  return res.send({ user: req.decoded })
+  return res.send({ user: req.decoded, isLoggedIn: true })
 }
