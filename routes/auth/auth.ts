@@ -3,7 +3,14 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
 import db from 'models'
+
 dotenv.config()
+
+declare const process: {
+  env: {
+    AUTH_KEY: string
+  }
+}
 
 export const signup = async (req: Request, res: Response, next: NextFunction) => {
   const { username, password } = req.body

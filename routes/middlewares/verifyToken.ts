@@ -1,7 +1,14 @@
 import { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
+
 dotenv.config()
+
+declare const process: {
+  env: {
+    AUTH_KEY: string
+  }
+}
 
 export const verifyToken = (req: any, res: Response, next: NextFunction) => {
   try {

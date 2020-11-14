@@ -6,10 +6,12 @@ import morgan from 'morgan'
 import helmet from 'helmet'
 import hpp from 'hpp'
 import dotenv from 'dotenv'
+import cors from 'cors'
 import { Sequelize } from 'sequelize/types'
 
 /* Internal dependencies */
 import { init } from 'models'
+import SocketIO from 'routes/socket'
 import authRouter from 'routes/auth'
 import logger from 'logger'
 
@@ -24,8 +26,11 @@ async function stopServer(server: Server, sequelize: Sequelize, signal?: string)
 
 async function runServer() {
   const app = express()
+  const server = http.createServer(app)
   const sequelize = init()
   const { PORT: port = 4000 } = process.env
+
+  SocketIO.init(server)
 
   if (process.env.NODE_ENV === 'production') {
     app.use(morgan('combined'))
@@ -35,6 +40,7 @@ async function runServer() {
     app.use(morgan('dev'))
   }
 
+  app.use(cors({ origin: 'https://localhost:3000' }))
   app.use(express.json())
   app.use(express.urlencoded({ extended: false }))
   app.use(cookieParser(process.env.COOKIE_SECRET))
@@ -48,7 +54,7 @@ async function runServer() {
     })
   })
 
-  const server = http.createServer(app).listen(port, () => {
+  server.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`)
   })
 
