@@ -41,7 +41,7 @@ export const signin = async (req: Request, res: Response, next: NextFunction) =>
           id: user.id,
           username: user.username
         }, process.env.AUTH_KEY, {
-          expiresIn: '30m'
+          expiresIn: '3h'
         })
         return res
           .cookie('token', token, { httpOnly: true })
