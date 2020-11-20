@@ -1,4 +1,7 @@
+/* External dependencies */
 import express from 'express'
+
+/* Internal dependencies */
 import { signup, signin, signout, isLoggedIn } from './auth'
 import { verifyToken } from 'routes/middlewares/verifyToken'
 

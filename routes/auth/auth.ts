@@ -1,7 +1,10 @@
+/* External dependencies */
 import { Request, Response, NextFunction } from 'express'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
+
+/* Internal dependencies */
 import db from 'models'
 
 dotenv.config()

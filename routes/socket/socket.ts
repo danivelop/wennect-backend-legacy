@@ -2,6 +2,9 @@
 import { Server } from 'http'
 import { Server as SocketServer, Socket } from 'socket.io'
 
+/* Internal dependencies */
+import SocketEvent from 'constants/SocketEvent'
+
 class SocketIO {
   _io: SocketServer | null
 
@@ -24,33 +27,30 @@ class SocketIO {
 
   connect() {
     this.io.on('connection', (socket: Socket) => {
-      this.createRoom(socket)
-      this.joinRoom(socket)
+      this.enterGround(socket)
+      this.leaveGround(socket)
     })
   }
 
-  createRoom(socket: Socket) {
-    socket.on('createRoom', (room: string) => {
-      const isRoomExist = socket.rooms.has(room)
+  enterGround(socket: Socket) {
+    socket.on(SocketEvent.EnterGround, (roomId: string) => {
+      const isRoomExist = socket.rooms.has(roomId)
+
+      socket.join(roomId)
 
       if (isRoomExist) {
-        return this.io.to(socket.id).emit('error', `Room id "${room}" is already exists`)
+        return socket.emit(SocketEvent.Joined, `joined room id "${roomId}"`)
+      } else {
+        return socket.emit(SocketEvent.Created, `created room id "${roomId}"`)
       }
-
-      socket.join(room)
-      this.io.to(socket.id).emit('created', 'created')
     })
   }
 
-  joinRoom(socket: Socket) {
-    socket.on('joinRoom', (room: string) => {
-      const isRoomExist = socket.rooms.has(room)
+  leaveGround(socket: Socket) {
+    socket.on(SocketEvent.LeaveGround, (roomId: string) => {
+      socket.leave(roomId)
 
-      if (!isRoomExist) {
-        return this.io.to(socket.id).emit('error', `Room id "${room}" doesn't exist`)
-      }
-      socket.join(room)
-      this.io.to(socket.id).emit('joined')
+      socket.emit(SocketEvent.LeaveGround, roomId)
     })
   }
 }
