@@ -39,9 +39,7 @@ class SocketIO {
       socket.join(roomId)
 
       if (isRoomExist) {
-        return socket.emit(SocketEvent.Joined, `joined room id "${roomId}"`)
-      } else {
-        return socket.emit(SocketEvent.Created, `created room id "${roomId}"`)
+        return socket.to(roomId).emit(SocketEvent.Join, socket.id)
       }
     })
   }
@@ -49,8 +47,6 @@ class SocketIO {
   leaveGround(socket: Socket) {
     socket.on(SocketEvent.LeaveGround, (roomId: string) => {
       socket.leave(roomId)
-
-      socket.emit(SocketEvent.LeaveGround, roomId)
     })
   }
 }

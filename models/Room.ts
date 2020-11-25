@@ -2,7 +2,7 @@
 import { Sequelize, Model, ModelDefined, DataTypes, Optional } from 'sequelize'
 
 /* Internal dependencies */
-import CategoryType from 'constants/CatrgoryType'
+import CategoryType from 'constants/CategoryType'
 
 interface RoomAttributes {
   id: number
