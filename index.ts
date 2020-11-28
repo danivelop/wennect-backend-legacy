@@ -1,6 +1,6 @@
 /* External dependencies */
 import express, { Request, Response, NextFunction } from 'express'
-import http, { Server } from 'http'
+import https, { Server } from 'https'
 import cookieParser from 'cookie-parser'
 import morgan from 'morgan'
 import helmet from 'helmet'
@@ -14,6 +14,7 @@ import { init } from 'models'
 import SocketIO from 'routes/socket'
 import authRouter from 'routes/auth'
 import logger from 'logger'
+import sslConfig from 'private/ssl-config'
 
 dotenv.config()
 
@@ -25,8 +26,14 @@ async function stopServer(server: Server, sequelize: Sequelize, signal?: string)
 }
 
 async function runServer() {
+  const options = {
+    key: sslConfig.privateKey,
+    cert: sslConfig.certificate,
+    passphrase: 'qwer1234',
+  }
+
   const app = express()
-  const server = http.createServer(app)
+  const server = https.createServer(options, app)
   const sequelize = init()
   const { PORT: port = 4000 } = process.env
 
@@ -40,10 +47,13 @@ async function runServer() {
     app.use(morgan('dev'))
   }
 
-  app.use(cors({ origin: 'https://localhost:3000' }))
+  app.use(cors({ origin: '*' }))
   app.use(express.json())
   app.use(express.urlencoded({ extended: false }))
   app.use(cookieParser(process.env.COOKIE_SECRET))
+  app.get('/abc', (req, res, next) => {
+    res.send('hello')
+  })
 
   app.use('/api/auth', authRouter)
 

@@ -19,7 +19,7 @@ class SocketIO {
   init(server: Server) {
     this._io = new SocketServer(server, {
       cors: {
-        origin: 'https://localhost:3000',
+        origin: '*',
       }
     })
     this.connect()
