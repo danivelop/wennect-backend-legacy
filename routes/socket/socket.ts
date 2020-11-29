@@ -29,24 +29,29 @@ class SocketIO {
     this.io.on('connection', (socket: Socket) => {
       this.enterGround(socket)
       this.leaveGround(socket)
+      this.iceCandidate(socket)
     })
   }
 
   enterGround(socket: Socket) {
     socket.on(SocketEvent.EnterGround, (roomId: string) => {
-      const isRoomExist = socket.rooms.has(roomId)
-
       socket.join(roomId)
-
-      if (isRoomExist) {
-        return socket.to(roomId).emit(SocketEvent.Join, socket.id)
-      }
+      socket.to(roomId).emit(SocketEvent.Join, socket.id)
     })
   }
 
   leaveGround(socket: Socket) {
     socket.on(SocketEvent.LeaveGround, (roomId: string) => {
       socket.leave(roomId)
+    })
+  }
+
+  iceCandidate(socket: Socket) {
+    socket.on(SocketEvent.IceCandidate, ({ remoteId, ...payload }) => {
+      this.io.to(remoteId).emit(SocketEvent.IceCandidate, {
+        remoteId: socket.id,
+        ...payload
+      })
     })
   }
 }
