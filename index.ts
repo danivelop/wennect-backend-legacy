@@ -51,9 +51,6 @@ async function runServer() {
   app.use(express.json())
   app.use(express.urlencoded({ extended: false }))
   app.use(cookieParser(process.env.COOKIE_SECRET))
-  app.get('/abc', (req, res, next) => {
-    res.send('hello')
-  })
 
   app.use('/api/auth', authRouter)
 
