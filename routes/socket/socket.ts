@@ -30,6 +30,8 @@ class SocketIO {
       this.enterGround(socket)
       this.leaveGround(socket)
       this.iceCandidate(socket)
+      this.offer(socket)
+      this.answer(socket)
     })
   }
 
@@ -51,6 +53,24 @@ class SocketIO {
       this.io.to(remoteId).emit(SocketEvent.IceCandidate, {
         remoteId: socket.id,
         ...payload
+      })
+    })
+  }
+
+  offer(socket: Socket) {
+    socket.on(SocketEvent.Offer, ({ remoteId, sessionDescription }) => {
+      this.io.to(remoteId).emit(SocketEvent.Offer, {
+        remoteId: socket.id,
+        sessionDescription,
+      })
+    })
+  }
+
+  answer(socket: Socket) {
+    socket.on(SocketEvent.Answer, ({ remoteId, sessionDescription }) => {
+      this.io.to(remoteId).emit(SocketEvent.Answer, {
+        remoteId: socket.id,
+        sessionDescription,
       })
     })
   }
