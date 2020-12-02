@@ -14,7 +14,7 @@ import { init } from 'models'
 import SocketIO from 'routes/socket'
 import authRouter from 'routes/auth'
 import logger from 'logger'
-import sslConfig from 'private/ssl-config'
+import { privateKey, certificate } from 'private/ssl-config'
 
 dotenv.config()
 
@@ -27,8 +27,8 @@ async function stopServer(server: Server, sequelize: Sequelize, signal?: string)
 
 async function runServer() {
   const options = {
-    key: sslConfig.privateKey,
-    cert: sslConfig.certificate,
+    key: privateKey,
+    cert: certificate,
     passphrase: 'qwer1234',
   }
 
@@ -57,7 +57,7 @@ async function runServer() {
   app.use((error: any, req: Request, res: Response, next: NextFunction) => {
     logger.error(error.message)
     return res.status(error.status || 500).send({
-      message: error.message
+      message: error.message,
     })
   })
 
@@ -68,7 +68,7 @@ async function runServer() {
   try {
     await sequelize.authenticate()
     await sequelize.sync()
-  } catch(error) {
+  } catch (error) {
     stopServer(server, sequelize)
     throw error
   }

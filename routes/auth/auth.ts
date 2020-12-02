@@ -42,9 +42,9 @@ export const signin = async (req: Request, res: Response, next: NextFunction) =>
       if (isValidPassword)  {
         const token = jwt.sign({
           id: user.id,
-          username: user.username
+          username: user.username,
         }, process.env.AUTH_KEY, {
-          expiresIn: '3h'
+          expiresIn: '3h',
         })
         return res
           .cookie('token', token, { httpOnly: true })

@@ -20,7 +20,7 @@ class SocketIO {
     this._io = new SocketServer(server, {
       cors: {
         origin: '*',
-      }
+      },
     })
     this.connect()
   }
@@ -52,7 +52,7 @@ class SocketIO {
     socket.on(SocketEvent.IceCandidate, ({ remoteId, ...payload }) => {
       this.io.to(remoteId).emit(SocketEvent.IceCandidate, {
         remoteId: socket.id,
-        ...payload
+        ...payload,
       })
     })
   }
