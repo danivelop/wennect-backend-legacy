@@ -27,24 +27,25 @@ class SocketIO {
 
   connect() {
     this.io.on('connection', (socket: Socket) => {
-      this.enterGround(socket)
-      this.leaveGround(socket)
+      this.enter(socket)
+      this.leave(socket)
       this.iceCandidate(socket)
       this.offer(socket)
       this.answer(socket)
     })
   }
 
-  enterGround(socket: Socket) {
-    socket.on(SocketEvent.EnterGround, (roomId: string) => {
+  enter(socket: Socket) {
+    socket.on(SocketEvent.Enter, (roomId: string) => {
       socket.join(roomId)
-      socket.to(roomId).emit(SocketEvent.Join, socket.id)
+      socket.to(roomId).emit(SocketEvent.Enter, socket.id)
     })
   }
 
-  leaveGround(socket: Socket) {
-    socket.on(SocketEvent.LeaveGround, (roomId: string) => {
+  leave(socket: Socket) {
+    socket.on(SocketEvent.Leave, (roomId: string) => {
       socket.leave(roomId)
+      socket.to(roomId).emit(SocketEvent.Leave, socket.id)
     })
   }
 
