@@ -50,29 +50,20 @@ class SocketIO {
   }
 
   iceCandidate(socket: Socket) {
-    socket.on(SocketEvent.IceCandidate, ({ remoteId, ...payload }) => {
-      this.io.to(remoteId).emit(SocketEvent.IceCandidate, {
-        remoteId: socket.id,
-        ...payload,
-      })
+    socket.on(SocketEvent.IceCandidate, (remoteId: string, iceCandidate) => {
+      this.io.to(remoteId).emit(SocketEvent.IceCandidate, socket.id, iceCandidate)
     })
   }
 
   offer(socket: Socket) {
-    socket.on(SocketEvent.Offer, ({ remoteId, sessionDescription }) => {
-      this.io.to(remoteId).emit(SocketEvent.Offer, {
-        remoteId: socket.id,
-        sessionDescription,
-      })
+    socket.on(SocketEvent.Offer, (remoteId: string, sessionDescription) => {
+      this.io.to(remoteId).emit(SocketEvent.Offer, socket.id, sessionDescription)
     })
   }
 
   answer(socket: Socket) {
-    socket.on(SocketEvent.Answer, ({ remoteId, sessionDescription }) => {
-      this.io.to(remoteId).emit(SocketEvent.Answer, {
-        remoteId: socket.id,
-        sessionDescription,
-      })
+    socket.on(SocketEvent.Answer, (remoteId: string, sessionDescription) => {
+      this.io.to(remoteId).emit(SocketEvent.Answer, socket.id, sessionDescription)
     })
   }
 }
