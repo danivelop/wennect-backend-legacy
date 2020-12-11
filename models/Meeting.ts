@@ -10,7 +10,7 @@ interface MeetingCreationAttributes extends Optional<MeetingAttributes, 'id'> {}
 interface MeetingInstance extends Model<MeetingAttributes, MeetingCreationAttributes>, MeetingAttributes {}
 
 function meetingInit(sequelize: Sequelize) {
-  const Meeting: ModelDefined<MeetingAttributes, MeetingCreationAttributes> = sequelize.define<MeetingInstance>('Meeting', {
+  const Meeting = sequelize.define<MeetingInstance>('Meeting', {
     id: {
       type: DataTypes.INTEGER.UNSIGNED,
       autoIncrement: true,

@@ -13,7 +13,7 @@ interface RoomCreationAttributes extends Optional<RoomAttributes, 'id'> {}
 interface RoomInstance extends Model<RoomAttributes, RoomCreationAttributes>, RoomAttributes {}
 
 function roomInit(sequelize: Sequelize) {
-  const Room: ModelDefined<RoomAttributes, RoomCreationAttributes> = sequelize.define<RoomInstance>('Room', {
+  const Room = sequelize.define<RoomInstance>('Room', {
     id: {
       type: DataTypes.INTEGER.UNSIGNED,
       autoIncrement: true,

@@ -10,7 +10,7 @@ import cors from 'cors'
 import { Sequelize } from 'sequelize/types'
 
 /* Internal dependencies */
-import { init } from 'models'
+import sequelize from 'models'
 import SocketIO from 'routes/socket'
 import authRouter from 'routes/auth'
 import logger from 'logger'
@@ -34,7 +34,6 @@ async function runServer() {
 
   const app = express()
   const server = https.createServer(options, app)
-  const sequelize = init()
   const { PORT: port = 4000 } = process.env
 
   SocketIO.init(server)

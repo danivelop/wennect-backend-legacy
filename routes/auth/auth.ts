@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
 
 /* Internal dependencies */
-import db from 'models'
+import { User } from 'models'
 
 dotenv.config()
 
@@ -19,13 +19,13 @@ export const signup = async (req: Request, res: Response, next: NextFunction) =>
   const { username, password } = req.body
 
   try {
-    const user = await db.User.findOne({ where: { username } })
+    const user = await User.findOne({ where: { username } })
     if (user) {
       return res.status(403).send({ message: 'Email already exists. Please enter another email' })
     }
 
     const hash = await bcrypt.hash(password, 12)
-    await db.User.create({ username, password: hash })
+    await User.create({ username, password: hash })
     return res.send({ message: 'Thanks for signing up with us' })
   } catch (error) {
     return next(error)
@@ -36,7 +36,7 @@ export const signin = async (req: Request, res: Response, next: NextFunction) =>
   const { username, password } = req.body
 
   try {
-    const user = await db.User.findOne({ where: { username } })
+    const user = await User.findOne({ where: { username } })
     if (user) {
       const isValidPassword = await bcrypt.compare(password, user.password)
       if (isValidPassword)  {
