@@ -1,5 +1,5 @@
 /* External dependencies */
-import { Sequelize, Model, ModelDefined, DataTypes, Optional } from 'sequelize'
+import { Sequelize, Model, DataTypes, Optional } from 'sequelize'
 
 /* Internal dependencies */
 import CategoryType from 'constants/CategoryType'
