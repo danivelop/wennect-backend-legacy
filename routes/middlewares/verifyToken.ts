@@ -11,9 +11,18 @@ declare const process: {
   }
 }
 
-export const verifyToken = (req: any, res: Response, next: NextFunction) => {
+export interface JWTTokenAttributes {
+  id: string
+  email: string
+}
+
+export interface InjectedRequestType {
+  decoded?: JWTTokenAttributes
+}
+
+export const verifyToken = (req: Request & InjectedRequestType, res: Response, next: NextFunction) => {
   try {
-    req.decoded = jwt.verify(req.cookies.token, process.env.AUTH_KEY)
+    req.decoded = jwt.verify(req.cookies.token, process.env.AUTH_KEY) as JWTTokenAttributes
     return next()
   } catch (error) {
     if (error.name === 'TokenExpiredError') {
