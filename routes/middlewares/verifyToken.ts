@@ -24,7 +24,7 @@ export const verifyToken = (req: Request & InjectedRequestType, res: Response, n
   try {
     req.decoded = jwt.verify(req.cookies.token, process.env.AUTH_KEY) as JWTTokenAttributes
     return next()
-  } catch (error) {
+  } catch (error: any) {
     if (error.name === 'TokenExpiredError') {
       error.status = 419
       return next(error)
