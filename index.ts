@@ -1,5 +1,6 @@
 /* External dependencies */
 import express, { Request, Response, NextFunction } from 'express'
+import fs from 'fs'
 import https, { Server } from 'https'
 import cookieParser from 'cookie-parser'
 import morgan from 'morgan'
@@ -14,7 +15,6 @@ import sequelize from 'models'
 import SocketIO from 'routes/socket'
 import authRouter from 'routes/auth'
 import logger from 'logger'
-import { privateKey, certificate } from 'private/ssl-config'
 
 dotenv.config()
 
@@ -27,9 +27,8 @@ async function stopServer(server: Server, sequelize: Sequelize, signal?: string)
 
 async function runServer() {
   const options = {
-    key: privateKey,
-    cert: certificate,
-    passphrase: 'qwer1234',
+    key: fs.readFileSync('./private/192.168.2.17-key.pem'),
+    cert: fs.readFileSync('./private/192.168.2.17.pem'),
   }
 
   const app = express()
